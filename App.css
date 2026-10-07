@@ -1,184 +1,1320 @@
-.counter {
-  font-size: 16px;
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: var(--accent);
-  background: var(--accent-bg);
-  border: 2px solid transparent;
-  transition: border-color 0.3s;
-  margin-bottom: 24px;
+STEP 1 — Create main project folder
 
-  &:hover {
-    border-color: var(--accent-border);
-  }
-  &:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
+Create a folder anywhere, for example:
+
+C:\Users\Admin\Desktop\Workspace\my-dashboard
+
+Open this folder in VS Code.
+
+Final structure will be:
+
+my-dashboard/
+│
+├── frontend/
+│
+└── backend/
+STEP 2 — Create Frontend
+
+Open VS Code terminal inside my-dashboard.
+
+Run:
+
+npm create vite@latest frontend
+
+It will ask:
+
+Select a framework:
+
+Choose:
+
+React
+
+Then:
+
+Select a variant:
+
+Choose:
+
+JavaScript
+
+Now:
+
+cd frontend
+npm install
+STEP 3 — Install frontend packages
+
+Inside frontend:
+
+npm install react-router-dom
+
+If you want Tailwind like your existing project:
+
+npm install tailwindcss @tailwindcss/vite
+STEP 4 — Frontend folder structure
+
+Now create this:
+
+frontend/
+│
+├── public/
+│
+├── src/
+│   │
+│   ├── components/
+│   │   ├── Navbar.jsx
+│   │   └── Footer.jsx
+│   │
+│   ├── pages/
+│   │   ├── Login.jsx
+│   │   ├── Register.jsx
+│   │   └── Home.jsx
+│   │
+│   ├── App.jsx
+│   ├── App.css
+│   ├── index.css
+│   └── main.jsx
+│
+├── package.json
+├── vite.config.js
+└── index.html
+STEP 5 — Frontend vite.config.js
+
+Open:
+
+frontend/vite.config.js
+
+Replace with:
+
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+
+export default defineConfig({
+  plugins: [react(), tailwindcss()],
+});
+STEP 6 — Frontend index.css
+
+Open:
+
+frontend/src/index.css
+
+Replace everything with:
+
+@import "tailwindcss";
+STEP 7 — main.jsx
+
+Open:
+
+frontend/src/main.jsx
+
+Use:
+
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+
+import "./index.css";
+import App from "./App.jsx";
+
+createRoot(document.getElementById("root")).render(
+  <StrictMode>
+    <App />
+  </StrictMode>
+);
+STEP 8 — App.jsx
+
+Open:
+
+frontend/src/App.jsx
+
+Use:
+
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Home from "./pages/Home";
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+
+        <Route path="/" element={<Login />} />
+
+        <Route path="/login" element={<Login />} />
+
+        <Route path="/register" element={<Register />} />
+
+        <Route path="/home" element={<Home />} />
+
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-.hero {
-  position: relative;
+export default App;
+STEP 9 — Create Navbar.jsx
 
-  .base,
-  .framework,
-  .vite {
-    inset-inline: 0;
-    margin: 0 auto;
-  }
+Create:
 
-  .base {
-    width: 170px;
-    position: relative;
-    z-index: 0;
-  }
+frontend/src/components/Navbar.jsx
 
-  .framework,
-  .vite {
-    position: absolute;
-  }
+Code:
 
-  .framework {
-    z-index: 1;
-    top: 34px;
-    height: 28px;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
-      scale(1.4);
-  }
+import { useState } from "react";
 
-  .vite {
-    z-index: 0;
-    top: 107px;
-    height: 26px;
-    width: auto;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg)
-      scale(0.8);
-  }
+function Navbar() {
+  const [menu, setMenu] = useState(false);
+
+  return (
+    <nav className="bg-blue-600 px-6 py-4 text-white">
+
+      <div className="flex justify-between items-center">
+
+        <h1 className="text-2xl font-bold">
+          My Dashboard
+        </h1>
+
+        <button
+          onClick={() => setMenu(!menu)}
+          className="md:hidden text-2xl"
+        >
+          ☰
+        </button>
+
+        <div className="hidden md:flex gap-6">
+
+          <a href="/home" className="hover:text-gray-200">
+            Home
+          </a>
+
+          <a href="/home" className="hover:text-gray-200">
+            About
+          </a>
+
+          <a href="/home" className="hover:text-gray-200">
+            Contact
+          </a>
+
+        </div>
+
+      </div>
+
+      {menu && (
+        <div className="flex flex-col gap-3 mt-4 md:hidden">
+
+          <a href="/home">
+            Home
+          </a>
+
+          <a href="/home">
+            About
+          </a>
+
+          <a href="/home">
+            Contact
+          </a>
+
+        </div>
+      )}
+
+    </nav>
+  );
 }
 
-#center {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-  place-content: center;
-  place-items: center;
-  flex-grow: 1;
+export default Navbar;
+STEP 10 — Create Footer.jsx
 
-  @media (max-width: 1024px) {
-    padding: 32px 20px 24px;
-    gap: 18px;
-  }
+Create:
+
+frontend/src/components/Footer.jsx
+
+Code:
+
+function Footer() {
+  return (
+    <footer className="bg-gray-800 text-white text-center p-5">
+
+      <p>
+        © 2026 MyDashboard. All Rights Reserved.
+      </p>
+
+    </footer>
+  );
 }
 
-#next-steps {
-  display: flex;
-  border-top: 1px solid var(--border);
-  text-align: left;
+export default Footer;
+STEP 11 — Create Home.jsx
 
-  & > div {
-    flex: 1 1 0;
-    padding: 32px;
-    @media (max-width: 1024px) {
-      padding: 24px 20px;
+Create:
+
+frontend/src/pages/Home.jsx
+
+Code:
+
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+
+function Home() {
+  return (
+    <div className="min-h-screen flex flex-col">
+
+      <Navbar />
+
+      <main className="flex-1 bg-gray-100 py-10">
+
+        <div className="max-w-5xl mx-auto px-6">
+
+          <h1 className="text-3xl font-bold mb-8">
+            Dashboard
+          </h1>
+
+          <div className="grid md:grid-cols-3 gap-6">
+
+            <div className="bg-white p-6 rounded-lg shadow">
+              <h2 className="text-xl font-bold mb-2">
+                Users
+              </h2>
+
+              <p className="text-gray-600">
+                Manage users
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow">
+              <h2 className="text-xl font-bold mb-2">
+                Products
+              </h2>
+
+              <p className="text-gray-600">
+                Manage products
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow">
+              <h2 className="text-xl font-bold mb-2">
+                Reports
+              </h2>
+
+              <p className="text-gray-600">
+                View reports
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </main>
+
+      <Footer />
+
+    </div>
+  );
+}
+
+export default Home;
+STEP 12 — Create Register.jsx
+
+Create:
+
+frontend/src/pages/Register.jsx
+
+Full code:
+
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+function Register() {
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleRegister = async (e) => {
+
+    e.preventDefault();
+
+    try {
+
+      const response = await fetch(
+        "http://localhost:5000/api/auth/register",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify({
+            name,
+            email,
+            password,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+
+        alert(data.message);
+
+        navigate("/login");
+
+      } else {
+
+        alert(data.message);
+
+      }
+
+    } catch (error) {
+
+      console.log(error);
+
+      alert("Server connection failed");
+
     }
-  }
+  };
 
-  .icon {
-    margin-bottom: 16px;
-    width: 22px;
-    height: 22px;
-  }
+  return (
 
-  @media (max-width: 1024px) {
-    flex-direction: column;
-    text-align: center;
-  }
+    <div className="min-h-screen flex items-center justify-center bg-gray-200">
+
+      <div className="bg-white p-8 rounded-lg shadow-md w-96">
+
+        <h1 className="text-2xl font-bold text-center mb-6">
+          Register
+        </h1>
+
+        <form onSubmit={handleRegister}>
+
+          <label className="block mb-2 font-medium">
+            Name
+          </label>
+
+          <input
+            type="text"
+            placeholder="Enter your name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full border p-2 rounded mb-4"
+          />
+
+          <label className="block mb-2 font-medium">
+            Gmail
+          </label>
+
+          <input
+            type="email"
+            placeholder="Enter your Gmail"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full border p-2 rounded mb-4"
+          />
+
+          <label className="block mb-2 font-medium">
+            Password
+          </label>
+
+          <input
+            type="password"
+            placeholder="Enter your password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full border p-2 rounded mb-6"
+          />
+
+          <button
+            type="submit"
+            className="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600"
+          >
+            Register
+          </button>
+
+        </form>
+
+        <p className="text-center mt-4">
+
+          Already have an account?{" "}
+
+          <button
+            onClick={() => navigate("/login")}
+            className="text-blue-500"
+          >
+            Login
+          </button>
+
+        </p>
+
+      </div>
+
+    </div>
+
+  );
 }
 
-#docs {
-  border-right: 1px solid var(--border);
+export default Register;
+STEP 13 — Create Login.jsx
 
-  @media (max-width: 1024px) {
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-  }
-}
+Create:
 
-#next-steps ul {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  gap: 8px;
-  margin: 32px 0 0;
+frontend/src/pages/Login.jsx
 
-  .logo {
-    height: 18px;
-  }
+Full code:
 
-  a {
-    color: var(--text-h);
-    font-size: 16px;
-    border-radius: 6px;
-    background: var(--social-bg);
-    display: flex;
-    padding: 6px 12px;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    transition: box-shadow 0.3s;
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-    &:hover {
-      box-shadow: var(--shadow);
+function Login() {
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+
+    e.preventDefault();
+
+    try {
+
+      const response = await fetch(
+        "http://localhost:5000/api/auth/login",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+
+        alert(data.message);
+
+        localStorage.setItem(
+          "user",
+          JSON.stringify(data.user)
+        );
+
+        navigate("/home");
+
+      } else {
+
+        alert(data.message);
+
+      }
+
+    } catch (error) {
+
+      console.log(error);
+
+      alert("Server connection failed");
+
     }
-    .button-icon {
-      height: 18px;
-      width: 18px;
-    }
-  }
+  };
 
-  @media (max-width: 1024px) {
-    margin-top: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
+  return (
 
-    li {
-      flex: 1 1 calc(50% - 8px);
-    }
+    <div className="min-h-screen flex items-center justify-center bg-gray-200">
 
-    a {
-      width: 100%;
-      justify-content: center;
-      box-sizing: border-box;
-    }
+      <div className="bg-white p-8 rounded-lg shadow-md w-96">
+
+        <h1 className="text-2xl font-bold text-center mb-6">
+          Login
+        </h1>
+
+        <form onSubmit={handleLogin}>
+
+          <label className="block mb-2 font-medium">
+            Gmail
+          </label>
+
+          <input
+            type="email"
+            placeholder="Enter your Gmail"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full border p-2 rounded mb-4"
+          />
+
+          <label className="block mb-2 font-medium">
+            Password
+          </label>
+
+          <input
+            type="password"
+            placeholder="Enter your password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full border p-2 rounded mb-6"
+          />
+
+          <button
+            type="submit"
+            className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+          >
+            Login
+          </button>
+
+        </form>
+
+        <p className="text-center mt-4">
+
+          Don't have an account?{" "}
+
+          <button
+            onClick={() => navigate("/register")}
+            className="text-blue-500"
+          >
+            Register
+          </button>
+
+        </p>
+
+      </div>
+
+    </div>
+
+  );
+}
+
+export default Login;
+STEP 14 — Frontend complete
+
+Frontend structure now:
+
+frontend/
+│
+├── public/
+│
+├── src/
+│   │
+│   ├── components/
+│   │   ├── Navbar.jsx
+│   │   └── Footer.jsx
+│   │
+│   ├── pages/
+│   │   ├── Login.jsx
+│   │   ├── Register.jsx
+│   │   └── Home.jsx
+│   │
+│   ├── App.jsx
+│   ├── App.css
+│   ├── index.css
+│   └── main.jsx
+│
+├── package.json
+├── package-lock.json
+├── vite.config.js
+└── index.html
+
+Now backend create pannuvom.
+
+STEP 15 — Create Backend
+
+Open a new terminal.
+
+Make sure you are inside:
+
+my-dashboard
+
+Run:
+
+mkdir backend
+
+Then:
+
+cd backend
+
+Run:
+
+npm init -y
+STEP 16 — Install Backend packages
+
+Inside:
+
+my-dashboard/backend
+
+Run:
+
+npm install express mongoose cors dotenv bcryptjs
+
+Then:
+
+npm install --save-dev nodemon
+STEP 17 — Backend folder structure
+
+Create:
+
+backend/
+│
+├── models/
+│   └── User.js
+│
+├── routes/
+│   └── authRoutes.js
+│
+├── .env
+├── server.js
+├── package.json
+└── package-lock.json
+STEP 18 — Backend package.json
+
+Open:
+
+backend/package.json
+
+Change scripts:
+
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "My Dashboard Backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   }
 }
 
-#spacer {
-  height: 88px;
-  border-top: 1px solid var(--border);
-  @media (max-width: 1024px) {
-    height: 48px;
+Don't remove the dependencies automatically added by npm install.
+
+STEP 19 — Create .env
+
+Create:
+
+backend/.env
+
+Code:
+
+PORT=5000
+MONGO_URI=mongodb://127.0.0.1:27017/myDashboardDB
+STEP 20 — Create User.js
+
+Create:
+
+backend/models/User.js
+
+Code:
+
+const mongoose = require("mongoose");
+
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
+
+    password: {
+      type: String,
+      required: true,
+    },
+  },
+  {
+    timestamps: true,
   }
+);
+
+const User = mongoose.model("User", userSchema);
+
+module.exports = User;
+STEP 21 — Create authRoutes.js
+
+Create:
+
+backend/routes/authRoutes.js
+
+Full code:
+
+const express = require("express");
+const bcrypt = require("bcryptjs");
+
+const User = require("../models/User");
+
+const router = express.Router();
+
+
+// =========================
+// REGISTER
+// =========================
+
+router.post("/register", async (req, res) => {
+
+  try {
+
+    const { name, email, password } = req.body;
+
+    // Check fields
+    if (!name || !email || !password) {
+
+      return res.status(400).json({
+        message: "All fields are required",
+      });
+
+    }
+
+
+    // Check existing user
+    const existingUser = await User.findOne({
+      email,
+    });
+
+    if (existingUser) {
+
+      return res.status(400).json({
+        message: "Email already registered",
+      });
+
+    }
+
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(
+      password,
+      10
+    );
+
+
+    // Create user
+    const newUser = new User({
+
+      name: name,
+
+      email: email,
+
+      password: hashedPassword,
+
+    });
+
+
+    // Save user
+    await newUser.save();
+
+
+    res.status(201).json({
+
+      message: "Registration successful",
+
+    });
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+
+      message: "Server error",
+
+    });
+
+  }
+
+});
+
+
+// =========================
+// LOGIN
+// =========================
+
+router.post("/login", async (req, res) => {
+
+  try {
+
+    const { email, password } = req.body;
+
+
+    // Check fields
+    if (!email || !password) {
+
+      return res.status(400).json({
+
+        message: "Email and password are required",
+
+      });
+
+    }
+
+
+    // Find user
+    const user = await User.findOne({
+      email,
+    });
+
+
+    if (!user) {
+
+      return res.status(401).json({
+
+        message: "Invalid email or password",
+
+      });
+
+    }
+
+
+    // Check password
+    const passwordMatch = await bcrypt.compare(
+      password,
+      user.password
+    );
+
+
+    if (!passwordMatch) {
+
+      return res.status(401).json({
+
+        message: "Invalid email or password",
+
+      });
+
+    }
+
+
+    // Login successful
+    res.status(200).json({
+
+      message: "Login successful",
+
+      user: {
+
+        id: user._id,
+
+        name: user.name,
+
+        email: user.email,
+
+      },
+
+    });
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+
+      message: "Server error",
+
+    });
+
+  }
+
+});
+
+
+module.exports = router;
+STEP 22 — Create server.js
+
+Create:
+
+backend/server.js
+
+Full code:
+
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const dotenv = require("dotenv");
+
+const authRoutes = require("./routes/authRoutes");
+
+
+// Load .env
+dotenv.config();
+
+
+const app = express();
+
+
+// =========================
+// MIDDLEWARE
+// =========================
+
+app.use(cors());
+
+app.use(express.json());
+
+
+// =========================
+// TEST API
+// =========================
+
+app.get("/", (req, res) => {
+
+  res.send("Backend server is running");
+
+});
+
+
+// =========================
+// AUTH ROUTES
+// =========================
+
+app.use("/api/auth", authRoutes);
+
+
+// =========================
+// MONGODB CONNECTION
+// =========================
+
+mongoose
+  .connect(process.env.MONGO_URI)
+
+  .then(() => {
+
+    console.log("MongoDB connected successfully");
+
+
+    // Start server
+    app.listen(
+      process.env.PORT,
+      () => {
+
+        console.log(
+          `Server running on http://localhost:${process.env.PORT}`
+        );
+
+      }
+    );
+
+  })
+
+  .catch((error) => {
+
+    console.log(
+      "MongoDB connection failed:",
+      error
+    );
+
+  });
+STEP 23 — Final complete structure
+
+Your project should now look exactly like this:
+
+my-dashboard/
+│
+│
+├── frontend/
+│   │
+│   ├── public/
+│   │
+│   ├── src/
+│   │   │
+│   │   ├── components/
+│   │   │   ├── Navbar.jsx
+│   │   │   └── Footer.jsx
+│   │   │
+│   │   ├── pages/
+│   │   │   ├── Login.jsx
+│   │   │   ├── Register.jsx
+│   │   │   └── Home.jsx
+│   │   │
+│   │   ├── App.jsx
+│   │   ├── App.css
+│   │   ├── index.css
+│   │   └── main.jsx
+│   │
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── vite.config.js
+│   └── index.html
+│
+│
+└── backend/
+    │
+    ├── models/
+    │   └── User.js
+    │
+    ├── routes/
+    │   └── authRoutes.js
+    │
+    ├── .env
+    ├── server.js
+    ├── package.json
+    └── package-lock.json
+STEP 24 — MongoDB setup
+
+Make sure MongoDB is installed and running.
+
+Open MongoDB Compass.
+
+Connect to:
+
+mongodb://127.0.0.1:27017
+
+You don't have to manually create:
+
+myDashboardDB
+
+When we register the first user, MongoDB/Mongoose will create it.
+
+Final database:
+
+myDashboardDB
+│
+└── users
+    │
+    ├── User 1
+    ├── User 2
+    └── User 3
+STEP 25 — How to RUN the project
+
+This is important.
+
+You need 2 terminals.
+
+Terminal 1 — Backend
+
+Open terminal:
+
+my-dashboard
+
+Run:
+
+cd backend
+
+Then:
+
+npm run dev
+
+You should see:
+
+MongoDB connected successfully
+Server running on http://localhost:5000
+
+Keep this terminal running.
+
+STEP 26 — Terminal 2 — Frontend
+
+Open another terminal.
+
+Go to:
+
+my-dashboard
+
+Run:
+
+cd frontend
+
+Then:
+
+npm run dev
+
+You should get something like:
+
+Local: http://localhost:5173/
+
+Open:
+
+http://localhost:5173
+STEP 27 — Test Backend
+
+Before testing login, open:
+
+http://localhost:5000
+
+You should see:
+
+Backend server is running
+
+If you see that → Backend is working ✅
+
+STEP 28 — Test Register
+
+Open:
+
+http://localhost:5173/register
+
+Enter:
+
+Name:
+Barani
+
+Gmail:
+barani@gmail.com
+
+Password:
+123456
+
+Click:
+
+Register
+
+Frontend sends:
+
+POST
+http://localhost:5000/api/auth/register
+
+Backend receives it.
+
+Then:
+
+Express
+   ↓
+User model
+   ↓
+bcrypt
+   ↓
+MongoDB
+
+You should get:
+
+Registration successful
+
+Then it goes to:
+
+/login
+STEP 29 — Check MongoDB
+
+Open MongoDB Compass.
+
+You should see:
+
+myDashboardDB
+
+Then:
+
+users
+
+User data:
+
+{
+    _id: "...",
+    name: "Barani",
+    email: "barani@gmail.com",
+    password: "$2b$10$....",
+    createdAt: "...",
+    updatedAt: "..."
 }
 
-.ticks {
-  position: relative;
-  width: 100%;
+Password will be hashed, not plain text. ✅
 
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    top: -4.5px;
-    border: 5px solid transparent;
-  }
+STEP 30 — Test Login
 
-  &::before {
-    left: 0;
-    border-left-color: var(--border);
-  }
-  &::after {
-    right: 0;
-    border-right-color: var(--border);
-  }
-}
+Go:
+
+http://localhost:5173/login
+
+Enter:
+
+Email:
+barani@gmail.com
+
+Password:
+123456
+
+Click:
+
+Login
+
+Flow:
+
+Login.jsx
+     ↓
+fetch()
+     ↓
+POST /api/auth/login
+     ↓
+Express
+     ↓
+MongoDB
+     ↓
+Find email
+     ↓
+bcrypt.compare()
+     ↓
+Login successful
+     ↓
+/home
+
+You should see:
+
+Login successful
+
+Then:
+
+Dashboard
+Users
+Products
+Reports
+STEP 31 — Wrong password test
+
+Try:
+
+Email:
+barani@gmail.com
+
+Password:
+wrong123
+
+You should get:
+
+Invalid email or password
+
+So your backend authentication is working. ✅
+
+STEP 32 — Very important: 2 terminals
+
+Every time you work on this project:
+
+Terminal 1
+cd my-dashboard/backend
+npm run dev
+Terminal 2
+cd my-dashboard/frontend
+npm run dev
+
+Then browser:
+
+Frontend:
+http://localhost:5173
+
+Backend:
+http://localhost:5000
+Final architecture
+                MY DASHBOARD
+                     │
+          ┌──────────┴──────────┐
+          │                     │
+          ▼                     ▼
+      FRONTEND                BACKEND
+      React/Vite              Node/Express
+          │                     │
+          │ fetch()             │
+          └──────────►──────────┘
+                                │
+                                ▼
+                            Mongoose
+                                │
+                                ▼
+                            MongoDB
+                                │
+                                ▼
+                         myDashboardDB
+                                │
+                                ▼
+                             users
+
+So frontend and backend are completely separate now:
